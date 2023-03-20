@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+	<title>Bootstrap demo</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+
+	<div class="conteiner">
+
+		<div class="imagem">
+			<img src="imagem-cadastro.svg" />
+		</div>
+		<div class="conteudo">
+
+
+
+			<div class="header">
+				<div class="titulo-subtitulo">
+
+					<h1 class="titulo">Bem Vindo!</h1>
+					<h1 class="subtitulo">Cadastre um evento agora mesmo ou veja
+						os cadastrados!</h1>
+
+				</div>
+
+				<div class="botao-listar">
+
+					<button class="listar" onclick="mostrarMensagem()">Listar Eventos</button>
+
+				</div>
+
+			</div>
+
+
+
+			<form class="form" action="" id="cadastro-user">
+
+				<div class="input-group">
+
+					<div class="titulo">
+						<h1>Cadastro</h1>
+						<div class="" ><label id="info"></label></div>
+					</div>
+					
+					<div class="input-id input">
+						<label for="id">Id</label> <input class="form-control" type="text" id="id" name="id"
+							readonly="readonly" required>
+					</div>
+
+					<div class="input-nome input">
+						<label for="nome">Nome</label> <input class="form-control" type="text" id="nome" name="nome"
+							required>
+					</div>
+
+					<div class="input-idade input">
+						<label for="idade">Idade </label> <input class="form-control" type="number" id="idade"
+							name="idade" required>
+					</div>
+
+					<div class="botoes">
+						<div class="botao-limpar-buscar">
+
+							<button class="limpar" type="button" onclick="this.form.reset()">
+								Novo
+							</button>
+							<button type="button" class="buscar" data-bs-toggle="modal"
+								data-bs-target="#exampleModal">Buscar</button>
+
+						</div>
+						<div class="botao-cadastrar">
+							<button class="cadastrar" type="button" onclick="salvarUsuario()">
+								Cadastrar
+							</button>
+						</div>
+
+
+
+					</div>
+
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Buscar por nome</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+						onclick="limparTelaTabela()"></button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="mb-3">
+							<label for="nome" class="col-form-label">Nome:</label> <input type="text"
+								class="form-control" id="nomeBuscar">
+						</div>
+						<button type="button" class="btn btn-success" onclick="pesquisarUser()">Buscar</button>
+					</form>
+					<div class="card-table">
+						<table class="table" id="tabelaResultados">
+							<thead>
+								<tr>
+
+									<th scope="col">Id</th>
+									<th scope="col">Nome</th>
+									<th scope="col">Editar</th>
+									<th scope="col">Apagar</th>
+								</tr>
+							</thead>
+							<tbody>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"
+		integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+		integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+		integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+		crossorigin="anonymous"></script>
+
+
+	<script type="text/javascript">
+	
+	
+		function mostrarMensagem(){
+			
+			$('#info').addClass('success');
+
+			$("#info").text("esta funcao ainda nao foi implementada");
+			
+			var segundos = 0;
+
+			var intervalo = setInterval(function() {
+			    segundos++;
+			    console.log(segundos);
+			}, 1000);
+
+			setTimeout(function() {
+			    clearInterval(intervalo);
+			    $("#info").text("");
+			}, 5000);
+
+			
+			
+		}
+
+		function limparTelaTabela() {
+			
+			$("#tabelaResultados > tbody").empty();
+			$("#nomeBuscar").val(null);
+		
+		}
+
+		function apagarCadastro(id) {
+
+			$.ajax({
+				method: "DELETE",
+				url: "deletar",
+				data: {
+					id: id
+				},
+				success: function (response) {
+
+					alert("apagado!");
+					pesquisarUser();
+
+				}
+
+			}).fail(function (xhr, status, errThrowor) {
+				alert("erro ao apagar usuario por id: " + xhr.responseText);
+			});
+
+
+
+
+		}
+
+		function pesquisarUser() {
+
+			var nome = $("#nomeBuscar").val();
+
+			if (nome != null && nome.trim() != "") {
+
+				$.ajax({
+					method: "GET",
+					url: "buscar-por-nome",
+					data: { nome: nome },
+					success: function (response) {
+
+						$("#tabelaResultados > tbody > tr").remove();
+						for (var i = 0; i < response.length; i++) {
+
+							$('#tabelaResultados > tbody').append('<tr><td>'
+								+ response[i].id
+								+ '</td>  <td>'
+								+ response[i].nome
+								+ '</td><td> <button type="button" class="btn btn-info" onclick="colocarEmEdicao('
+								+ response[i].id
+								+ ')">Editar</button></td><td><button type="button" onclick="apagarCadastro(' + response[i].id + ')" class="btn btn-danger">Apagar</button></td> </tr>');
+
+						}
+
+					}
+
+				}).fail(function (xhr, status, errThrowor) {
+					alert("erro ao buscar usuario: "
+						+ xhr.responseText);
+				});
+
+			}
+
+		}
+
+		function colocarEmEdicao(id) {
+
+			$.ajax({
+				method: "GET",
+				url: "buscar-usuario",
+				data: {
+					id: id
+				},
+				success: function (response) {
+
+					$("#id").val(response.id);
+					$("#nome").val(response.nome);
+					$("#idade").val(response.idade);
+
+					$("#exampleModal").modal("hide");
+
+				}
+
+			}).fail(function (xhr, status, errThrowor) {
+				alert("erro ao buscar usuario por id: " + xhr.responseText);
+			});
+
+		}
+
+		function salvarUsuario() {
+			
+			
+			var id = $("#id").val();
+			var nome = $("#nome").val();
+			var idade = $("#idade").val();
+			
+			if(nome == null || nome == "" ){
+				
+				  $("#nome").focus();
+				  return;
+				
+			}
+			
+			if (idade == null || idade == "") {
+				      $("#idade").focus();
+				      return;
+			
+			}
+								
+			
+				$.ajax({
+							method : "POST",
+							url : "salvar",
+							data : JSON.stringify({
+								id : id,
+								nome : nome,
+								idade : idade
+							}),
+							contentType : "application/json; charset=utf-8",
+							success : function(response) {
+								$("#id").val(response.id);
+								alert("salvo");
+							}
+		
+						}).fail(function(xhr, status, errThrowor) {
+							alert("erro ao salvar usuario: " + xhr.responseText);
+						});
+				
+				
+				
+			}
+			
+			
+		
+	</script>
+</body>
+
+</html>
